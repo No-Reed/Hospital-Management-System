@@ -1,0 +1,48 @@
+.container {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 25px 17px 17px;
+  border-right: 1px solid rgba(49, 76, 59, .075);
+  background: #fbfcf9;
+}
+.brand { display: flex; align-items: center; gap: 10px; min-height: 42px; padding: 0 5px; }
+.logoWrap { width: 37px; height: 37px; display: grid; place-items: center; overflow: hidden; border-radius: 12px; background: #e8f3e9; }
+.logoWrap img { width: 100%; height: 100%; object-fit: contain; }
+.brandText { display: block; color: #29493b; font-family: Manrope, 'DM Sans', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: -.65px; line-height: 1.03; }
+.brandText span { color: #749374; font-weight: 600; }
+.brandText small { display: block; margin-top: 5px; color: #a0aca1; font-family: 'DM Sans', sans-serif; font-size: 7px; font-weight: 700; letter-spacing: 1.2px; }
+.workspaceLabel { margin: 46px 0 12px 12px; color: #a2ada4; font-size: 8px; font-weight: 700; letter-spacing: 1.45px; }
+.nav { display: flex; flex-direction: column; gap: 5px; }
+.button { position: relative; display: flex; align-items: center; gap: 11px; min-height: 42px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: #818f84; text-align: left; font-size: 11px; font-weight: 500; cursor: pointer; transition: color .18s, background .18s, transform .18s; }
+.button:hover { color: #4b6e56; background: #f2f6f1; transform: translateX(2px); }
+.buttonActive { color: #477658; background: #edf5ed; font-weight: 700; box-shadow: inset 2px 0 #78a780; }
+.buttonActive:hover { background: #edf5ed; transform: none; }
+.icon { width: 17px; height: 17px; display: block; flex: 0 0 17px; }
+.icon svg { width: 100%; height: 100%; }
+.activeDot { width: 5px; height: 5px; margin-left: auto; border-radius: 50%; background: #72a47d; box-shadow: 0 0 0 3px rgba(114,164,125,.1); }
+.sidebar-note { display: flex; flex-direction: column; gap: 6px; margin: auto 3px 17px; padding: 15px 13px; border: 1px solid #ebefe7; border-radius: 13px; background: linear-gradient(140deg,#f4f7ef,#f9f7ee); }
+.note-icon { width: 24px; height: 24px; display: grid; place-items: center; margin-bottom: 2px; border-radius: 8px; background: #e8efdf; color: #8e9e68; font-size: 13px; }
+.sidebar-note strong { color: #627362; font-size: 10px; font-weight: 700; }
+.sidebar-note > span:last-child { color: #9aa599; font-size: 9px; }
+.profile { display: flex; align-items: center; gap: 9px; padding: 13px 4px 1px; border-top: 1px solid #eef0eb; }
+.profile-avatar { width: 31px; height: 31px; display: grid; place-items: center; border: 1px solid #d9e9dc; border-radius: 11px; background: #edf5ec; color: #5a8664; font-size: 9px; font-weight: 700; }
+.profile-copy { min-width: 0; display: flex; flex: 1; flex-direction: column; gap: 3px; }
+.profile-copy strong { color: #53645a; font-size: 9px; font-weight: 700; }
+.profile-copy span { color: #9ba59e; font-size: 8px; }
+.profile-menu { align-self: center; padding: 0 4px 5px; color: #96a196; font-size: 17px; letter-spacing: 1px; }
+@media (max-width: 850px) {
+  .container { position: relative; min-height: auto; padding: 12px 17px 0; border-right: 0; border-bottom: 1px solid rgba(49,76,59,.075); }
+  .brand { min-height: 35px; }
+  .logoWrap { width: 33px; height: 33px; border-radius: 10px; }
+  .brandText { font-size: 14px; }
+  .brandText small { font-size: 6px; }
+  .workspaceLabel, .sidebar-note, .profile { display: none; }
+  .nav { flex-direction: row; gap: 4px; overflow-x: auto; margin: 9px -2px 0; padding: 0 0 8px; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .button { flex: 0 0 auto; min-height: 34px; gap: 7px; padding: 0 10px; white-space: nowrap; font-size: 10px; }
+  .buttonActive { box-shadow: inset 0 -2px #78a780; }
+  .icon { width: 15px; height: 15px; flex-basis: 15px; }
+}

@@ -1,0 +1,48 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: stellarcare-backend
+    expose:
+      - "4000"
+    environment:
+      MONGO_URI: ${MONGO_URI:?Set MONGO_URI in the root .env file}
+      PORT: 4000
+      NODE_ENV: production
+      CLIENT_ORIGINS: ${CLIENT_ORIGINS:?Set CLIENT_ORIGINS to the exact browser origin}
+      DEFAULT_CLINIC_ID: ${DEFAULT_CLINIC_ID:-default}
+      FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:?Set FIREBASE_PROJECT_ID in the root .env file}
+      FIREBASE_CLIENT_EMAIL: ${FIREBASE_CLIENT_EMAIL:?Set FIREBASE_CLIENT_EMAIL in the root .env file}
+      FIREBASE_PRIVATE_KEY: ${FIREBASE_PRIVATE_KEY:?Set FIREBASE_PRIVATE_KEY in the root .env file}
+    networks:
+      - stellarcare-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:4000/api/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_FIREBASE_API_KEY: ${VITE_FIREBASE_API_KEY:?Set VITE_FIREBASE_API_KEY in the root .env file}
+        VITE_FIREBASE_AUTH_DOMAIN: ${VITE_FIREBASE_AUTH_DOMAIN:?Set VITE_FIREBASE_AUTH_DOMAIN in the root .env file}
+        VITE_FIREBASE_PROJECT_ID: ${FIREBASE_PROJECT_ID:?Set FIREBASE_PROJECT_ID in the root .env file}
+        VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID:?Set VITE_FIREBASE_APP_ID in the root .env file}
+        VITE_API_URL: ""
+    ports:
+      - "5173:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - stellarcare-network
+    restart: unless-stopped
+
+networks:
+  stellarcare-network:
+    driver: bridge

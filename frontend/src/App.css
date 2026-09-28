@@ -1,0 +1,7 @@
+#root { min-height: 100vh; }
+
+@media print {
+  body { background: #fff !important; }
+  .app-shell, .topbar, .section-intro, .no-print { display: none !important; }
+  .paper { max-width: none !important; padding: 0 !important; border: none !important; box-shadow: none !important; }
+}
