@@ -1,4 +1,6 @@
-require('dotenv').config();
+const path = require('node:path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+require('dotenv').config({ path: path.resolve(__dirname, '../.env.local') });
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -74,6 +76,10 @@ app.post('/api/public/appointments', async (req, res, next) => {
     const { patientName, doctorId, preferredTime, contactInfo } = parsed.data;
     const doctor = await StaffUser.findOne({ _id: doctorId, role: 'doctor', active: true, publicBookingEnabled: true, clinicId: CLINIC_ID });
     if (!doctor) return res.status(400).json({ error: 'That provider is not accepting online requests.' });
+    
+    const existing = await Appointment.findOne({ doctorId: doctor._id, preferredTime, status: { $ne: 'Cancelled' } });
+    if (existing) return res.status(409).json({ error: 'This time slot is already booked for this provider. Please choose another time.' });
+
     const appointment = await Appointment.create({
       clinicId: doctor.clinicId,
       patientName,
