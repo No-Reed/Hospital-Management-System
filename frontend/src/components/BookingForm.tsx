@@ -6,11 +6,12 @@ export type BookingData = { doctor: string; name: string; time: string; contact:
 type AvailabilityResult = { available?: boolean; suggestions?: string[] };
 type BookingFormProps = {
   doctors?: Doctor[];
+  loading?: boolean;
   onCheck?: (args: { doctor: string; time: string }) => Promise<AvailabilityResult>;
   onBook?: (args: BookingData) => Promise<boolean | void> | boolean | void;
 };
 
-export default function BookingForm({ doctors = [], onCheck, onBook }: BookingFormProps) {
+export default function BookingForm({ doctors = [], loading = false, onCheck, onBook }: BookingFormProps) {
   const [name, setName] = useState('');
   const [contact, setContact] = useState('');
   const [doctor, setDoctor] = useState('');
@@ -22,7 +23,7 @@ export default function BookingForm({ doctors = [], onCheck, onBook }: BookingFo
   async function checkAvailability() {
     if (!onCheck) return;
     try {
-      const result = await onCheck({ doctor, time });
+      const result = await onCheck({ doctor: selectedDoctor, time });
       setSuggestions(result.suggestions ?? []);
     } catch (error) {
       console.error('Could not check appointment availability:', error);
@@ -51,11 +52,12 @@ export default function BookingForm({ doctors = [], onCheck, onBook }: BookingFo
     <aside className={styles.panel}>
       <div className={styles.panelHeading}>
         <span className={styles.panelIcon} aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg></span>
-        <div><div className={styles.panelTitle}>Make a little room</div><div className={styles.panelSubtitle}>Book a visit with your care team</div></div>
+        <div><div className={styles.panelTitle}>Schedule an Appointment</div><div className={styles.panelSubtitle}>Connect with our care team</div></div>
       </div>
 
       <label className={styles.label} htmlFor="doctor-choice">Care provider</label>
-      <select id="doctor-choice" className={styles.input} value={selectedDoctor} onChange={(event) => setDoctor(event.target.value)}>
+      <select id="doctor-choice" className={styles.input} value={selectedDoctor} disabled={loading || doctors.length === 0} onChange={(event) => setDoctor(event.target.value)}>
+        {doctors.length === 0 && <option value="">{loading ? 'Loading providers…' : 'No providers available'}</option>}
         {doctors.map((item) => <option key={item._id} value={item._id}>{item.name}</option>)}
       </select>
 
@@ -74,7 +76,7 @@ export default function BookingForm({ doctors = [], onCheck, onBook }: BookingFo
         <button type="button" className={styles.btnPrimary} onClick={() => void book()} disabled={doctors.length === 0}>Book a visit <span aria-hidden="true">→</span></button>
         <button type="button" className={styles.btnGhost} onClick={() => { setName(''); setTime('10:00'); setSuggestions([]); }}>Reset</button>
       </div>
-      <div className={styles.panelFootnote}><span>✳</span> One thoughtful visit at a time.</div>
+      <div className={styles.panelFootnote}><span>✳</span> Providing exceptional care.</div>
     </aside>
   );
 }

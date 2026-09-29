@@ -42,18 +42,43 @@ export default function PublicBookingPage({ onNavigate }: Props) {
 
   return <main className={styles.portalPage}>
     <header className={styles.portalTop}>
-      <a className={styles.brand} href="/" onClick={event => { event.preventDefault(); onNavigate('/'); }}><img src="/stellarcare-mark.png" alt=""/><span>StellarCare<small>CARE, MADE CLOSER</small></span></a>
-      <nav className={styles.staffLinks} aria-label="Staff access"><a href="/doctor/login" onClick={event => { event.preventDefault(); onNavigate('/doctor/login'); }}>Doctor sign in</a><a href="/employee/login" onClick={event => { event.preventDefault(); onNavigate('/employee/login'); }}>Employee sign in</a></nav>
+      <a className={styles.brand} href="/" onClick={event => { event.preventDefault(); onNavigate('/'); }}>
+        <img src="/stellarcare-mark.png" alt=""/>
+        <span>Hospital Management<small>Patient Care System</small></span>
+      </a>
+      <nav className={styles.staffLinks} aria-label="Staff access">
+        <a href="/doctor/login" onClick={event => { event.preventDefault(); onNavigate('/doctor/login'); }}>Doctor sign in</a>
+        <a href="/employee/login" onClick={event => { event.preventDefault(); onNavigate('/employee/login'); }}>Employee sign in</a>
+      </nav>
     </header>
-    <section className={styles.portalHero}><span className={styles.eyebrow}>A LITTLE MORE HUMAN, EVERY DAY</span><h1>Care that starts<br/><span>with a visit.</span></h1><p>Request an appointment with your care team. No patient account is needed to send a request; the clinic will contact you to confirm the details.</p></section>
+    
+    <section className={styles.portalHero}>
+      <span className={styles.eyebrow}>SEAMLESS CLINIC OPERATIONS</span>
+      <h1>Care that starts<br/><span>with a visit.</span></h1>
+      <p>Request an appointment with your care team. No patient account is needed to send a request; the clinic will contact you to confirm the details.</p>
+    </section>
+
     <section className={styles.bookingWrap}>
       <div>
-        <BookingForm doctors={doctors} onBook={submit} />
-        {loading && <div className={styles.notice} role="status">Loading appointment providers…</div>}
-        {requestError && <div className={styles.notice} role="alert">{requestError}</div>}
-        {confirmation && <div className={styles.success} role="status"><strong>Request received</strong>{confirmation}</div>}
+        {loading && <div className={styles.notice} role="status" style={{ marginBottom: '16px' }}>Loading appointment providers…</div>}
+        {requestError && <div className={styles.error} role="alert" style={{ marginBottom: '16px' }}>{requestError}</div>}
+        {confirmation && <div className={styles.success} role="status" style={{ marginBottom: '16px' }}><strong>Request received</strong><br/>{confirmation}</div>}
+        <BookingForm doctors={doctors} loading={loading} onBook={submit} />
       </div>
-      <aside className={styles.bookingAside}><h2>What happens next?</h2><p>Your preferred time is a request, not a confirmed appointment. A clinic employee will review it and follow up to confirm or suggest another time.</p><ul><li>Choose a provider</li><li>Tell us your name and preferred time</li><li>Wait for confirmation from the clinic</li></ul><p>If you need urgent or emergency help, contact local emergency services rather than using this form.</p></aside>
+      
+      <aside className={styles.bookingAside}>
+        <h2>What happens next?</h2>
+        <p>Your preferred time is a request, not a confirmed appointment. A clinic employee will review it and follow up to confirm or suggest another time.</p>
+        <ul>
+          <li>Choose a provider</li>
+          <li>Tell us your name and preferred time</li>
+          <li>Wait for confirmation from the clinic</li>
+        </ul>
+        <div className={styles.hint}>
+          If you need urgent or emergency help, contact local emergency services rather than using this form.
+        </div>
+      </aside>
     </section>
   </main>;
 }
+

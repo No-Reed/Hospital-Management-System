@@ -1,4 +1,6 @@
-require('dotenv').config();
+const path = require('node:path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env.local') });
 const mongoose = require('mongoose');
 const StaffUser = require('../models/StaffUser');
 const { initializeFirebase, firebaseReady, getFirebaseAuth } = require('../firebase');

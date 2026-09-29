@@ -32,7 +32,10 @@ export default function StaffLogin({ role, onNavigate }: { role: Role; onNavigat
   }
 
   return <main className={styles.authPage}>
-    <a className={styles.brand} href="/" onClick={event => { event.preventDefault(); onNavigate('/'); }}><img src="/stellarcare-mark.png" alt=""/><span>StellarCare<small>CARE, MADE CLOSER</small></span></a>
+    <a className={styles.brand} href="/" onClick={event => { event.preventDefault(); onNavigate('/'); }}>
+      <img src="/stellarcare-mark.png" alt=""/>
+      <span>Hospital Management<small>Patient Care System</small></span>
+    </a>
     <section className={styles.authCard}>
       <div className={styles.eyebrow}>STAFF WORKSPACE</div>
       <h1>{label} sign in</h1>
