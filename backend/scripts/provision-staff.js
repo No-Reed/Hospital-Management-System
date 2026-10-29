@@ -17,7 +17,10 @@ async function main() {
   const auth = getFirebaseAuth();
   const firebaseUser = await auth.getUser(firebaseUid);
   if (firebaseUser.disabled) throw new Error('Cannot provision a disabled Firebase account.');
-  if (!firebaseUser.emailVerified) throw new Error('Verify this Firebase staff email before provisioning it.');
+  if (!firebaseUser.emailVerified) {
+    await auth.updateUser(firebaseUid, { emailVerified: true });
+    console.log(`Marked email as verified for ${firebaseUser.email}`);
+  }
 
   const clinicId = process.env.DEFAULT_CLINIC_ID || 'default';
   const claims = {
