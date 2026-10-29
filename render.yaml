@@ -3,6 +3,7 @@ services:
   - type: web
     name: stellarcare-backend
     runtime: node
+    plan: free
     rootDir: backend
     buildCommand: npm install
     startCommand: node index.js
