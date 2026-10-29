@@ -1,3 +1,4 @@
+const fs = require('node:fs');
 const path = require('node:path');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 require('dotenv').config({ path: path.resolve(__dirname, '../.env.local') });
@@ -28,7 +29,7 @@ const CLINIC_ID = process.env.DEFAULT_CLINIC_ID || 'default';
 
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '32kb' }));
 app.use('/api/public/appointments', rateLimit({ windowMs: 15 * 60 * 1000, limit: 20, standardHeaders: 'draft-8', legacyHeaders: false }));
@@ -295,6 +296,14 @@ io.on('connection', socket => {
   socket.join(`staff:${staff.id}`);
 });
 
+const frontendDist = path.resolve(__dirname, '../frontend/dist');
+if (fs.existsSync(frontendDist)) {
+  app.use(express.static(frontendDist));
+  app.get(/^(?!\/api).*/, (_req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
 app.use((error, _req, res, _next) => {
   console.error('Request failed:', error.name || 'Error');
   res.status(500).json({ error: 'The request could not be completed.' });
@@ -302,7 +311,9 @@ app.use((error, _req, res, _next) => {
 
 async function start() {
   if (!process.env.MONGO_URI) throw new Error('MONGO_URI is required. Copy backend/.env.example to backend/.env and set your Atlas URI.');
-  if (process.env.NODE_ENV === 'production' && !process.env.CLIENT_ORIGINS) throw new Error('CLIENT_ORIGINS must be set to the exact production frontend origin.');
+  if (process.env.NODE_ENV === 'production' && !process.env.CLIENT_ORIGINS && !fs.existsSync(frontendDist)) {
+    throw new Error('CLIENT_ORIGINS must be set to the exact production frontend origin.');
+  }
   initializeFirebase();
   if (!firebaseReady()) throw new Error('Firebase Admin credentials are required. Set FIREBASE_PROJECT_ID and the server credential variables in backend/.env.');
   await mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 10000 });
