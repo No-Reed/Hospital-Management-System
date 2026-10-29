@@ -16,6 +16,9 @@ Follow **[SETUP.md](./SETUP.md)** for the main install and migration steps. See 
 
 For a local frontend-only start, install in `frontend/` and run `npm run dev`. Protected pages require a configured Firebase web app plus an active staff profile in the backend.
 
+## Live Link
+https://stellarcare.onrender.com/
+
 ## Validation
 
 ```bash
